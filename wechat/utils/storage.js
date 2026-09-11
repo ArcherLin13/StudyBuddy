@@ -16,7 +16,10 @@ var DEFAULT_SUBJECTS = [
 var DEFAULT_SETTINGS = {
   planDaysPerWeek: 5,
   checkinMinMinutes: 15,
-  soundOn: true
+  soundOn: true,
+  dailyTargetMinutes: 60,
+  dailyMoneyCap: 10,
+  moneyMinMinutes: 15
 }
 
 function clone(obj) {
@@ -106,10 +109,75 @@ function ensureWeekMeta(dateStr) {
 
 function addRecord(record) {
   var records = getRecords()
+  if (!record.id) record.id = makeId('rec')
   records.push(record)
   setRecords(records)
   ensureWeekMeta(record.date)
   return records
+}
+
+function daySubjectSlices(records, date) {
+  var map = {}
+  var keys = []
+  records.forEach(function (r) {
+    if (r.date !== date) return
+    var name = r.subjectName || '未命名'
+    if (!map[name]) {
+      map[name] = {
+        date: date,
+        subjectId: r.subjectId,
+        subjectName: name,
+        seconds: 0
+      }
+      keys.push(name)
+    }
+    map[name].seconds += r.seconds || 0
+  })
+  keys.sort()
+  return keys.map(function (name) {
+    var row = map[name]
+    row.minutes = Math.round(row.seconds / 60)
+    return row
+  })
+}
+
+function deleteDayRecords(date) {
+  var next = getRecords().filter(function (r) {
+    return r.date !== date
+  })
+  setRecords(next)
+  return next
+}
+
+function deleteDaySubjectRecords(date, subjectName) {
+  var next = getRecords().filter(function (r) {
+    return !(r.date === date && (r.subjectName || '未命名') === subjectName)
+  })
+  setRecords(next)
+  return next
+}
+
+function setDaySubjectMinutes(date, subjectName, minutes) {
+  var all = getRecords()
+  var matched = all.filter(function (r) {
+    return r.date === date && (r.subjectName || '未命名') === subjectName
+  })
+  if (!matched.length) return all
+  var seconds = Math.max(0, Math.round(Number(minutes) * 60))
+  if (seconds < 1) return deleteDaySubjectRecords(date, subjectName)
+  var keep = matched[0]
+  keep.seconds = seconds
+  keep.endTs = (keep.startTs || Date.now()) + seconds * 1000
+  if (!keep.id) keep.id = makeId('rec')
+  var next = all.filter(function (r) {
+    return !(r.date === date && (r.subjectName || '未命名') === subjectName)
+  })
+  next.push(keep)
+  next.sort(function (a, b) {
+    return (a.startTs || 0) - (b.startTs || 0)
+  })
+  setRecords(next)
+  return next
 }
 
 function getSession() {
@@ -144,6 +212,10 @@ module.exports = {
   targetMinutesFromConfig: targetMinutesFromConfig,
   ensureWeekMeta: ensureWeekMeta,
   addRecord: addRecord,
+  daySubjectSlices: daySubjectSlices,
+  deleteDayRecords: deleteDayRecords,
+  deleteDaySubjectRecords: deleteDaySubjectRecords,
+  setDaySubjectMinutes: setDaySubjectMinutes,
   getSession: getSession,
   setSession: setSession,
   makeId: makeId

@@ -35,6 +35,19 @@
   line-height: 1;
 }
 
+.money {
+  margin-top: 24rpx;
+  font-size: 30rpx;
+  color: #c45c26;
+  font-weight: 600;
+}
+
+.money-hint {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #8a8680;
+}
+
 .main-btn {
   margin-top: 80rpx;
   width: 168rpx;

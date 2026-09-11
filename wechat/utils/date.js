@@ -48,6 +48,22 @@ function weekdayLabel(dateStr) {
   return labels[parseDate(dateStr).getDay()]
 }
 
+function formatDayLabel(dateStr) {
+  var parts = dateStr.split('-')
+  return Number(parts[1]) + '月' + Number(parts[2]) + '日'
+}
+
+function getMonthId(dateStr) {
+  return dateStr.slice(0, 7)
+}
+
+function formatMonthLabel(monthId) {
+  var parts = monthId.split('-')
+  var today = todayStr()
+  if (monthId === today.slice(0, 7)) return '本月'
+  return parts[0] + '年' + Number(parts[1]) + '月'
+}
+
 function formatWeekRange(weekId) {
   var end = addDays(weekId, 6)
   var a = weekId.split('-')
@@ -87,6 +103,9 @@ module.exports = {
   getWeekId: getWeekId,
   getWeekDays: getWeekDays,
   weekdayLabel: weekdayLabel,
+  formatDayLabel: formatDayLabel,
+  getMonthId: getMonthId,
+  formatMonthLabel: formatMonthLabel,
   formatWeekRange: formatWeekRange,
   formatMmSs: formatMmSs,
   formatDuration: formatDuration

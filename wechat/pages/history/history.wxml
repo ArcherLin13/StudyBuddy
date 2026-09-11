@@ -1,35 +1,75 @@
 <view class="page safe-bottom">
-  <view class="card" wx:for="{{weeks}}" wx:key="weekId">
-    <view class="head" data-id="{{item.weekId}}" bindtap="onToggle">
-      <view>
-        <text class="title">{{item.isCurrent ? '本周' : item.rangeText}}</text>
-        <text class="sub" wx:if="{{item.isCurrent}}">{{item.rangeText}}</text>
-        <text class="meta">总时长 {{item.durationText}}</text>
+  <view wx:for="{{weeks}}" wx:key="weekId">
+    <view wx:if="{{item.showMonth}}" class="month-bar">
+      <text class="month-title">{{item.monthLabel}}</text>
+      <text class="month-yuan">{{item.monthYuanText}}</text>
+    </view>
+    <view class="card">
+      <view class="head" data-id="{{item.weekId}}" bindtap="onToggle">
+        <view>
+          <text class="title">{{item.isCurrent ? '本周' : item.rangeText}}</text>
+          <text class="sub" wx:if="{{item.isCurrent}}">{{item.rangeText}}</text>
+          <text class="meta">总时长 {{item.durationText}}</text>
+          <text class="meta yuan" wx:if="{{item.weekYuanText}}">奖励 {{item.weekYuanText}}</text>
+        </view>
+        <view class="score-wrap">
+          <text class="score">{{item.score}}</text>
+          <text class="grade">{{item.grade}}</text>
+        </view>
       </view>
-      <view class="score-wrap">
-        <text class="score">{{item.score}}</text>
-        <text class="grade">{{item.grade}}</text>
+
+      <view wx:if="{{item.expanded}}" class="detail">
+        <view class="parts">
+          <view>时长分 {{item.timeScore}} / 60</view>
+          <view>稳定分 {{item.stabilityScore}} / 25</view>
+          <view>连击分 {{item.comboScore}} / 15（连续 {{item.streakDays}} 天）</view>
+        </view>
+
+        <view class="block-title">每天 · 点科目可改时长</view>
+        <view class="day-block" wx:for="{{item.daily}}" wx:for-item="day" wx:key="date">
+          <view class="day">
+            <text class="wk">周{{day.weekday}} · {{day.dayLabel}}</text>
+            <text class="dur">{{day.seconds ? day.durationText : '未学习'}}{{day.yuanText ? ' · ' + day.yuanText : ''}}</text>
+          </view>
+          <view class="sub-row" wx:for="{{day.slices}}" wx:for-item="slice" wx:key="subjectName">
+            <text class="sub-name">{{slice.subjectName}}</text>
+            <text class="sub-dur">{{slice.minutes}} 分钟</text>
+            <text
+              class="link"
+              data-date="{{slice.date}}"
+              data-name="{{slice.subjectName}}"
+              data-minutes="{{slice.minutes}}"
+              catchtap="onEditSubject"
+            >改</text>
+            <text
+              class="link danger"
+              data-date="{{slice.date}}"
+              data-name="{{slice.subjectName}}"
+              data-label="{{day.dayLabel}}"
+              catchtap="onDeleteSubject"
+            >删</text>
+          </view>
+          <text
+            wx:if="{{day.slices.length}}"
+            class="day-delete"
+            data-date="{{day.date}}"
+            data-label="{{day.dayLabel}}"
+            catchtap="onDeleteDay"
+          >删除当天</text>
+        </view>
       </view>
     </view>
+  </view>
 
-    <view wx:if="{{item.expanded}}" class="detail">
-      <view class="parts">
-        <view>时长分 {{item.timeScore}} / 60</view>
-        <view>稳定分 {{item.stabilityScore}} / 25</view>
-        <view>连击分 {{item.comboScore}} / 15（连续 {{item.streakDays}} 天）</view>
-      </view>
-
-      <view class="block-title">每天</view>
-      <view class="day" wx:for="{{item.daily}}" wx:for-item="day" wx:key="date">
-        <text class="wk">周{{day.weekday}}</text>
-        <text class="dur">{{day.seconds ? day.durationText : '未学习'}}</text>
-      </view>
-
-      <view class="block-title">科目</view>
-      <view wx:if="{{item.subjects.length === 0}}" class="empty">本周还没有记录</view>
-      <view class="day" wx:for="{{item.subjects}}" wx:for-item="sub" wx:key="name">
-        <text class="wk">{{sub.name}}</text>
-        <text class="dur">{{sub.durationText}}</text>
+  <view wx:if="{{editVisible}}" class="mask" catchtap="onEditCancel">
+    <view class="dialog" catchtap="noop">
+      <text class="dialog-title">修改时长</text>
+      <text class="dialog-sub">{{editDate}} · {{editName}}</text>
+      <input class="dialog-input" type="number" value="{{editMinutes}}" bindinput="onEditInput" focus />
+      <text class="dialog-help">改成 0 分钟等于删除这条。</text>
+      <view class="dialog-row">
+        <text class="dialog-cancel" bindtap="onEditCancel">取消</text>
+        <text class="dialog-save" bindtap="onEditSave">保存</text>
       </view>
     </view>
   </view>

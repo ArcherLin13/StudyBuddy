@@ -1,4 +1,6 @@
 var dateUtil = require('./date.js')
+var money = require('./money.js')
+var storage = require('./storage.js')
 
 function streakScore(days) {
   if (days <= 0) return 0
@@ -106,12 +108,18 @@ function computeWeek(weekId, records, weekMeta, subjects, settings) {
       .map(function (name) {
         return { name: name, seconds: row.subjects[name] }
       })
+    var slices = storage.daySubjectSlices(records, d)
+    var reward = money.rewardForDay(d, records, settings)
     return {
       date: d,
       weekday: dateUtil.weekdayLabel(d),
+      dayLabel: dateUtil.formatDayLabel(d),
       seconds: row.seconds,
       durationText: dateUtil.formatDuration(row.seconds),
-      subjects: subjectList
+      subjects: subjectList,
+      slices: slices,
+      yuanText: reward.earnedYuan ? money.formatYuan(reward.earnedYuan) : '',
+      earnedYuan: reward.earnedYuan
     }
   })
 
@@ -125,10 +133,14 @@ function computeWeek(weekId, records, weekMeta, subjects, settings) {
       }
     })
 
+  var rewards = money.allDayRewards(records, settings)
+  var earnedYuan = money.weekYuan(rewards, days)
   return {
     weekId: weekId,
     rangeText: dateUtil.formatWeekRange(weekId),
     isCurrent: weekId === dateUtil.getWeekId(today),
+    monthId: dateUtil.getMonthId(weekId),
+    monthLabel: dateUtil.formatMonthLabel(dateUtil.getMonthId(weekId)),
     totalSeconds: totalSeconds,
     durationText: dateUtil.formatDuration(totalSeconds),
     targetMinutes: targetMinutes,
@@ -139,6 +151,8 @@ function computeWeek(weekId, records, weekMeta, subjects, settings) {
     checkedDays: checkedDays.length,
     score: totalScore,
     grade: gradeLabel(totalScore),
+    weekYuan: earnedYuan,
+    weekYuanText: earnedYuan ? money.formatYuan(earnedYuan) : '',
     daily: daily,
     subjects: subjectsOut
   }
@@ -162,8 +176,15 @@ function listWeekIds(records) {
 }
 
 function listWeekReports(records, weekMeta, subjects, settings) {
+  var rewards = money.allDayRewards(records, settings)
+  var lastMonth = ''
   return listWeekIds(records).map(function (weekId) {
-    return computeWeek(weekId, records, weekMeta, subjects, settings)
+    var week = computeWeek(weekId, records, weekMeta, subjects, settings)
+    var monthId = week.monthId
+    week.showMonth = monthId !== lastMonth
+    week.monthYuanText = money.formatYuan(money.monthYuan(rewards, monthId))
+    lastMonth = monthId
+    return week
   })
 }
 

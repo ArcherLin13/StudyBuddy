@@ -1,5 +1,6 @@
 var storage = require('../../utils/storage.js')
 var dateUtil = require('../../utils/date.js')
+var money = require('../../utils/money.js')
 
 function remainingMs(current, now) {
   var elapsed = current.elapsedMsBeforePause || 0
@@ -20,7 +21,9 @@ Page({
     hint: '',
     btnMode: 'play',
     showEnd: false,
-    running: false
+    running: false,
+    todayYuanText: '',
+    todayMoneyHint: ''
   },
 
   onLoad: function () {
@@ -306,13 +309,42 @@ Page({
       }
     }
 
+    var settings = storage.getSettings()
+    var records = storage.getRecords()
+    var live = 0
+    if (session && session.current) {
+      live = Math.floor(elapsedMs(session.current, now) / 1000)
+    }
+    if (live > 0) {
+      records = records.concat([{
+        date: dateUtil.todayStr(),
+        subjectId: '_live',
+        subjectName: '',
+        seconds: live,
+        startTs: 0,
+        endTs: 0
+      }])
+    }
+    var reward = money.todayReward(records, settings)
+    var todayYuanText = money.formatYuan(reward.earnedYuan)
+    var todayMoneyHint = ''
+    if (reward.earnedYuan <= 0) {
+      todayMoneyHint = '满 15 分钟才开始计钱'
+    } else if (reward.streakDays >= 2) {
+      todayMoneyHint = '连击 ' + reward.streakDays + ' 天 ' + money.formatStreakMultiplier(reward.streakMultiplier)
+    } else {
+      todayMoneyHint = '1小时¥10 · 再学更划算'
+    }
+
     this.setData({
       subjectName: subjectName,
       timeText: timeText,
       hint: hint,
       btnMode: btnMode,
       showEnd: showEnd,
-      running: running
+      running: running,
+      todayYuanText: todayYuanText,
+      todayMoneyHint: todayMoneyHint
     })
   }
 })

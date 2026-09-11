@@ -91,3 +91,139 @@
   color: #8a8680;
   padding: 8rpx 0 16rpx;
 }
+
+.month-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8rpx 8rpx 16rpx;
+}
+
+.month-title {
+  font-size: 26rpx;
+  color: #8a8680;
+  letter-spacing: 2rpx;
+}
+
+.month-yuan {
+  font-size: 28rpx;
+  color: #c45c26;
+  font-weight: 600;
+}
+
+.yuan {
+  color: #c45c26;
+}
+
+.day-block {
+  padding: 8rpx 0 4rpx;
+  border-bottom: 1rpx solid #efece4;
+}
+
+.sub-row {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0 8rpx 16rpx;
+}
+
+.sub-name {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.sub-dur {
+  margin-right: 20rpx;
+  font-size: 26rpx;
+  color: #8a8680;
+}
+
+.link {
+  margin-left: 20rpx;
+  font-size: 26rpx;
+  color: #c45c26;
+}
+
+.link.danger {
+  color: #b42318;
+}
+
+.day-delete {
+  display: inline-block;
+  margin: 4rpx 0 12rpx 16rpx;
+  font-size: 24rpx;
+  color: #b42318;
+}
+
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(44, 42, 38, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.dialog {
+  width: 560rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx 32rpx;
+}
+
+.dialog-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.dialog-sub {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #8a8680;
+}
+
+.dialog-input {
+  margin-top: 28rpx;
+  background: #f7f6f2;
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.dialog-help {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #8a8680;
+}
+
+.dialog-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32rpx;
+}
+
+.dialog-cancel {
+  margin-right: 36rpx;
+  font-size: 28rpx;
+  color: #8a8680;
+  line-height: 72rpx;
+}
+
+.dialog-save {
+  width: 140rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  background: #c45c26;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: center;
+  line-height: 72rpx;
+}

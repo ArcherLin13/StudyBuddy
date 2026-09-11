@@ -3,6 +3,8 @@
     <text class="hint">{{hint}}</text>
     <text class="subject">{{subjectName}}</text>
     <text class="time">{{timeText}}</text>
+    <text class="money">今日 {{todayYuanText}}</text>
+    <text class="money-hint">{{todayMoneyHint}}</text>
 
     <view
       class="main-btn {{running ? 'is-running' : ''}}"

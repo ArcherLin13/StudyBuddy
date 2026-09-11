@@ -18,16 +18,16 @@
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "pages/timer/timer",
-        "text": "计时",
-        "iconPath": "assets/icons/timer.png",
-        "selectedIconPath": "assets/icons/timer-active.png"
-      },
-      {
         "pagePath": "pages/config/config",
         "text": "配置",
         "iconPath": "assets/icons/config.png",
         "selectedIconPath": "assets/icons/config-active.png"
+      },
+      {
+        "pagePath": "pages/timer/timer",
+        "text": "计时",
+        "iconPath": "assets/icons/timer.png",
+        "selectedIconPath": "assets/icons/timer-active.png"
       },
       {
         "pagePath": "pages/history/history",

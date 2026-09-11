@@ -46,6 +46,13 @@
     <text class="help">当天累计达到该时长才算打卡，计入稳定分和连击。</text>
   </view>
 
+  <view class="section-title">现金奖励</view>
+  <view class="card">
+    <text class="help tight">只看当天总时长，和学了几科无关。满 15 分钟才开始计钱。</text>
+    <text class="help tight">1 小时 ¥10 · 2 小时 ¥30 · 3 小时 ¥60 · 4 小时 ¥100，越学越划算。</text>
+    <text class="help">连续达标会再乘：第 2 天 ×1.1，第 4 天 ×1.2，第 7 天 ×1.3，第 14 天 ×1.5。多出来的钱算进周，再算进月。</text>
+  </view>
+
   <view class="section-title">闹钟</view>
   <view class="card row">
     <text class="label">倒计时结束响铃</text>
