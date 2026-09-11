@@ -1,0 +1,23 @@
+<view class="page safe-bottom">
+  <view class="stage">
+    <text class="hint">{{hint}}</text>
+    <text class="subject">{{subjectName}}</text>
+    <text class="time">{{timeText}}</text>
+
+    <view
+      class="main-btn {{running ? 'is-running' : ''}}"
+      bindtap="onMainTap"
+      hover-class="main-btn-hover"
+    >
+      <view wx:if="{{btnMode === 'pause'}}" class="icon-pause">
+        <view class="bar"></view>
+        <view class="bar"></view>
+      </view>
+      <view wx:else class="icon-play"></view>
+    </view>
+  </view>
+
+  <view wx:if="{{showEnd}}" class="end-wrap">
+    <view class="end-btn" bindtap="onEndTap" hover-class="end-btn-hover">结束</view>
+  </view>
+</view>

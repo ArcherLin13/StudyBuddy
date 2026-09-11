@@ -1,0 +1,54 @@
+<view class="page safe-bottom">
+  <view class="section-title">科目顺序与时长</view>
+  <view class="card" wx:for="{{subjects}}" wx:key="id">
+    <input
+      class="name"
+      value="{{item.name}}"
+      maxlength="12"
+      data-index="{{index}}"
+      bindinput="onNameInput"
+      bindblur="onNameBlur"
+    />
+    <view class="row">
+      <text class="label">时长（分钟）</text>
+      <view class="stepper">
+        <view class="step" data-index="{{index}}" bindtap="onMinus">−</view>
+        <input
+          class="num"
+          type="number"
+          value="{{item.durationMin}}"
+          data-index="{{index}}"
+          bindblur="onDurationInput"
+        />
+        <view class="step" data-index="{{index}}" bindtap="onPlus">+</view>
+      </view>
+    </view>
+    <view class="actions">
+      <text class="link {{index === 0 ? 'disabled' : ''}}" data-index="{{index}}" bindtap="onMoveUp">上移</text>
+      <text class="link {{index === subjects.length - 1 ? 'disabled' : ''}}" data-index="{{index}}" bindtap="onMoveDown">下移</text>
+      <text class="link danger" data-index="{{index}}" bindtap="onDelete">删除</text>
+    </view>
+  </view>
+
+  <view class="add" bindtap="onAdd" hover-class="add-hover">添加科目</view>
+
+  <view class="section-title">打分规则</view>
+  <view class="card">
+    <view class="row">
+      <text class="label">每周计划学习天数</text>
+      <input class="num lone" type="number" value="{{planDaysPerWeek}}" bindblur="onPlanDays" />
+    </view>
+    <text class="help">周目标 = 各科目时长之和 × 计划天数，用于时长分。</text>
+    <view class="row">
+      <text class="label">打卡门槛（分钟）</text>
+      <input class="num lone" type="number" value="{{checkinMinMinutes}}" bindblur="onCheckin" />
+    </view>
+    <text class="help">当天累计达到该时长才算打卡，计入稳定分和连击。</text>
+  </view>
+
+  <view class="section-title">闹钟</view>
+  <view class="card row">
+    <text class="label">倒计时结束响铃</text>
+    <switch checked="{{soundOn}}" bindchange="onSound" color="#c45c26" />
+  </view>
+</view>

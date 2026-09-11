@@ -1,0 +1,99 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 48rpx 40rpx;
+}
+
+.hint {
+  font-size: 26rpx;
+  color: #8a8680;
+  letter-spacing: 4rpx;
+}
+
+.subject {
+  margin-top: 16rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+}
+
+.time {
+  margin-top: 28rpx;
+  font-size: 112rpx;
+  font-weight: 500;
+  letter-spacing: 4rpx;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.main-btn {
+  margin-top: 80rpx;
+  width: 168rpx;
+  height: 168rpx;
+  border-radius: 50%;
+  background: #c45c26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16rpx 40rpx rgba(196, 92, 38, 0.28);
+}
+
+.main-btn.is-running {
+  background: #2c2a26;
+  box-shadow: 0 16rpx 40rpx rgba(44, 42, 38, 0.18);
+}
+
+.main-btn-hover {
+  opacity: 0.88;
+}
+
+.icon-play {
+  width: 0;
+  height: 0;
+  border-top: 28rpx solid transparent;
+  border-bottom: 28rpx solid transparent;
+  border-left: 48rpx solid #fff;
+  margin-left: 10rpx;
+}
+
+.icon-pause {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.icon-pause .bar {
+  width: 12rpx;
+  height: 48rpx;
+  background: #fff;
+  border-radius: 4rpx;
+  margin: 0 8rpx;
+}
+
+.end-wrap {
+  padding: 0 48rpx 48rpx;
+}
+
+.end-btn {
+  height: 88rpx;
+  border-radius: 44rpx;
+  border: 2rpx solid #d9d4cc;
+  color: #8a8680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
+
+.end-btn-hover {
+  background: #efece4;
+}

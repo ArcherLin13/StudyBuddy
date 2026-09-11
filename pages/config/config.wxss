@@ -1,0 +1,110 @@
+.page {
+  padding: 24rpx 32rpx 48rpx;
+  box-sizing: border-box;
+}
+
+.section-title {
+  margin: 28rpx 8rpx 16rpx;
+  font-size: 26rpx;
+  color: #8a8680;
+  letter-spacing: 2rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx 28rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.name {
+  font-size: 34rpx;
+  font-weight: 600;
+  height: 64rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #2c2a26;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+.step {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 12rpx;
+  background: #f7f6f2;
+  text-align: center;
+  line-height: 56rpx;
+  font-size: 32rpx;
+}
+
+.num {
+  width: 96rpx;
+  height: 56rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+
+.num.lone {
+  width: 88rpx;
+  background: #f7f6f2;
+  border-radius: 12rpx;
+}
+
+.actions {
+  display: flex;
+  margin-top: 20rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid #efece4;
+}
+
+.link {
+  margin-right: 36rpx;
+  font-size: 26rpx;
+  color: #c45c26;
+}
+
+.link.disabled {
+  color: #d0cbc3;
+}
+
+.link.danger {
+  color: #b42318;
+}
+
+.help {
+  display: block;
+  margin-top: 8rpx;
+  margin-bottom: 12rpx;
+  font-size: 22rpx;
+  color: #8a8680;
+  line-height: 1.5;
+}
+
+.add {
+  height: 80rpx;
+  border-radius: 16rpx;
+  border: 2rpx dashed #d9d4cc;
+  color: #8a8680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.add-hover {
+  background: #efece4;
+}
