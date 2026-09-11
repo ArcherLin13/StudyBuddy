@@ -1,4 +1,6 @@
 var storage = require('../../utils/storage.js')
+var firebase = require('../../utils/firebase.js')
+var sync = require('../../utils/sync.js')
 
 function clamp(n, min, max) {
   n = Number(n)
@@ -13,7 +15,11 @@ Page({
     subjects: [],
     planDaysPerWeek: 5,
     checkinMinMinutes: 15,
-    soundOn: true
+    soundOn: true,
+    accountEmail: '',
+    syncBusy: false,
+    email: '',
+    password: ''
   },
 
   onShow: function () {
@@ -22,16 +28,112 @@ Page({
 
   reload: function () {
     var settings = storage.getSettings()
+    var auth = firebase.getAuth()
     this.setData({
       subjects: storage.getSubjects(),
       planDaysPerWeek: settings.planDaysPerWeek,
       checkinMinMinutes: settings.checkinMinMinutes,
-      soundOn: settings.soundOn
+      soundOn: settings.soundOn,
+      accountEmail: (auth && auth.email) || ''
+    })
+  },
+
+  afterChange: function () {
+    sync.pushStudyData()
+  },
+
+  onEmail: function (e) {
+    this.setData({ email: e.detail.value })
+  },
+
+  onPassword: function (e) {
+    this.setData({ password: e.detail.value })
+  },
+
+  finishAuth: function (okTitle, okContent) {
+    var that = this
+    this.setData({ syncBusy: true })
+    sync.syncStudyData()
+      .then(function () {
+        that.setData({ syncBusy: false, password: '' })
+        that.reload()
+        wx.showToast({ title: okTitle, icon: 'none' })
+      })
+      .catch(function (err) {
+        that.setData({ syncBusy: false })
+        that.reload()
+        wx.showModal({
+          title: okTitle,
+          content: okContent + '。同步时：' + firebase.authErrorMessage(err && err.message),
+          showCancel: false
+        })
+      })
+  },
+
+  onSignIn: function () {
+    var email = (this.data.email || '').trim()
+    var password = this.data.password || ''
+    if (!email || password.length < 6) {
+      wx.showToast({ title: '请填写邮箱和至少 6 位密码', icon: 'none' })
+      return
+    }
+    var that = this
+    this.setData({ syncBusy: true })
+    firebase
+      .signIn(email, password)
+      .then(function () {
+        that.finishAuth('登录成功', '已登录')
+      })
+      .catch(function (err) {
+        that.setData({ syncBusy: false })
+        wx.showModal({
+          title: '登录失败',
+          content: firebase.authErrorMessage(err && err.message),
+          showCancel: false
+        })
+      })
+  },
+
+  onRegister: function () {
+    var email = (this.data.email || '').trim()
+    var password = this.data.password || ''
+    if (!email || password.length < 6) {
+      wx.showToast({ title: '请填写邮箱和至少 6 位密码', icon: 'none' })
+      return
+    }
+    var that = this
+    this.setData({ syncBusy: true })
+    firebase
+      .register(email, password)
+      .then(function () {
+        that.finishAuth('注册成功', '已登录')
+      })
+      .catch(function (err) {
+        that.setData({ syncBusy: false })
+        wx.showModal({
+          title: '注册失败',
+          content: firebase.authErrorMessage(err && err.message),
+          showCancel: false
+        })
+      })
+  },
+
+  onSignOut: function () {
+    var that = this
+    wx.showModal({
+      title: '退出登录',
+      content: '本机记录会保留，但不再和云端同步。',
+      success: function (res) {
+        if (!res.confirm) return
+        firebase.signOut()
+        that.reload()
+      }
     })
   },
 
   saveSubjects: function (list) {
     this.setData({ subjects: storage.setSubjects(list) })
+    this.afterChange()
   },
 
   onNameInput: function (e) {
@@ -126,17 +228,20 @@ Page({
     var value = clamp(e.detail.value, 1, 7)
     this.setData({ planDaysPerWeek: value })
     storage.setSettings({ planDaysPerWeek: value })
+    this.afterChange()
   },
 
   onCheckin: function (e) {
     var value = clamp(e.detail.value, 1, 180)
     this.setData({ checkinMinMinutes: value })
     storage.setSettings({ checkinMinMinutes: value })
+    this.afterChange()
   },
 
   onSound: function (e) {
     var value = !!e.detail.value
     this.setData({ soundOn: value })
     storage.setSettings({ soundOn: value })
+    this.afterChange()
   }
 })

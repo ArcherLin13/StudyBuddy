@@ -112,3 +112,47 @@
 .add-hover {
   background: #efece4;
 }
+
+.account-email {
+  display: block;
+  margin: 12rpx 0 20rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.account-input {
+  margin-top: 16rpx;
+  background: #f7f6f2;
+  border-radius: 16rpx;
+  padding: 18rpx 20rpx;
+  font-size: 30rpx;
+}
+
+.primary-btn {
+  margin-top: 24rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  background: #c45c26;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.primary-btn.disabled {
+  opacity: 0.55;
+}
+
+.ghost-btn {
+  margin-top: 16rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid #d9d4cc;
+  color: #8a8680;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}

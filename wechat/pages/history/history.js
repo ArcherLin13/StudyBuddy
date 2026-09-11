@@ -1,5 +1,6 @@
 var storage = require('../../utils/storage.js')
 var score = require('../../utils/score.js')
+var sync = require('../../utils/sync.js')
 
 Page({
   data: {
@@ -51,7 +52,12 @@ Page({
       content: '删除 ' + label + ' 的全部学习记录？周分和奖励会重算。',
       success: function (res) {
         if (!res.confirm) return
-        storage.deleteDayRecords(date)
+        var prev = storage.getRecords()
+        var next = storage.deleteDayRecords(date)
+        var removed = prev.filter(function (r) {
+          return r.date === date
+        })
+        sync.persistRecordChange(next, removed)
         that.reload()
       }
     })
@@ -67,7 +73,12 @@ Page({
       content: '删除 ' + label + '「' + name + '」的记录？',
       success: function (res) {
         if (!res.confirm) return
-        storage.deleteDaySubjectRecords(date, name)
+        var prev = storage.getRecords()
+        var next = storage.deleteDaySubjectRecords(date, name)
+        var removed = prev.filter(function (r) {
+          return r.date === date && (r.subjectName || '未命名') === name
+        })
+        sync.persistRecordChange(next, removed)
         that.reload()
       }
     })
@@ -98,7 +109,20 @@ Page({
       wx.showToast({ title: '请输入有效分钟数', icon: 'none' })
       return
     }
-    storage.setDaySubjectMinutes(this.data.editDate, this.data.editName, Math.min(600, Math.round(minutes)))
+    var prev = storage.getRecords()
+    var next = storage.setDaySubjectMinutes(
+      this.data.editDate,
+      this.data.editName,
+      Math.min(600, Math.round(minutes))
+    )
+    var nextIds = {}
+    next.forEach(function (r) {
+      if (r.id) nextIds[r.id] = true
+    })
+    var removed = prev.filter(function (r) {
+      return r.id && !nextIds[r.id]
+    })
+    sync.persistRecordChange(next, removed)
     this.setData({ editVisible: false })
     this.reload()
   }

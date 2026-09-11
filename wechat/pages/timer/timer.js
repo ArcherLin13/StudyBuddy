@@ -1,6 +1,7 @@
 var storage = require('../../utils/storage.js')
 var dateUtil = require('../../utils/date.js')
 var money = require('../../utils/money.js')
+var sync = require('../../utils/sync.js')
 
 function remainingMs(current, now) {
   var elapsed = current.elapsedMsBeforePause || 0
@@ -263,6 +264,7 @@ Page({
       startTs: current.startTs || Date.now(),
       endTs: Date.now()
     })
+    sync.pushStudyData()
   },
 
   playAlarm: function () {

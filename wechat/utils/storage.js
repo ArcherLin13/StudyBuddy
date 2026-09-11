@@ -5,7 +5,8 @@ var KEYS = {
   settings: 'settings',
   records: 'records',
   weekMeta: 'weekMeta',
-  session: 'session'
+  session: 'session',
+  payouts: 'payouts'
 }
 
 var DEFAULT_SUBJECTS = [
@@ -51,6 +52,7 @@ function setSubjects(list) {
     }
   })
   wx.setStorageSync(KEYS.subjects, next)
+  setSettings({})
   return next
 }
 
@@ -64,9 +66,18 @@ function getSettings() {
 }
 
 function setSettings(settings) {
-  var next = Object.assign({}, getSettings(), settings)
+  var next = Object.assign({}, getSettings(), settings, { updatedAt: Date.now() })
   wx.setStorageSync(KEYS.settings, next)
   return next
+}
+
+function getPayouts() {
+  return wx.getStorageSync(KEYS.payouts) || {}
+}
+
+function savePayouts(payouts) {
+  wx.setStorageSync(KEYS.payouts, payouts || {})
+  return payouts || {}
 }
 
 function getRecords() {
@@ -218,5 +229,7 @@ module.exports = {
   setDaySubjectMinutes: setDaySubjectMinutes,
   getSession: getSession,
   setSession: setSession,
+  getPayouts: getPayouts,
+  savePayouts: savePayouts,
   makeId: makeId
 }
