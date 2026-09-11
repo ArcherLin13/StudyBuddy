@@ -3,3 +3,14 @@ project.private.config.json
 node_modules/
 .idea/
 *.iml
+
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+*.tsbuildinfo
+/ios
+/android
+expo-qr.png
+*-expo-qr.png
+.env*.local
